@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'App'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '0.3.6'
+    compile 'info.picocli:picocli:3.8.0'
+    testCompile("org.assertj:assertj-core:3.11.1")
+    implementation 'com.google.code.gson:gson:2.8.5'
+    compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
+    compile group: 'org.apache.httpcomponents', name: 'httpasyncclient', version: '4.0.2'
+    compile group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.3.6'
+    compile group: 'org.json', name: 'json', version: '20140107'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
+    compile group: 'joda-time', name: 'joda-time', version: '2.10.1'
+}
