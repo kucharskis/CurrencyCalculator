@@ -4,6 +4,8 @@ import Data.ExchangeRate;
 import Printers.Printers;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import picocli.CommandLine.*;
 
 import java.util.Arrays;
@@ -26,18 +28,32 @@ public class CommandLineApp {
     @Option(names = {"-ma", "--MonthsAgo"})
     int numberOfMonths = 1;
 
+    @Option(names = {"-d", "--Date"})
+    String date;
+
     public void run() throws UnirestException {
         UnirestStarter.UnirestStart();
         DataReceiver currencyInformationReceiver = new CurrencyInformationReceiver();
 
         if (!earnOption) {
             for (String currency : currencies) {
-                System.out.println(Printers.printHowManyOtherCurrency(money, (ExchangeRate) currencyInformationReceiver.getData(currency)));
+                System.out.println(Printers.printHowManyOtherCurrency(money, (ExchangeRate) currencyInformationReceiver.getData(currency.toUpperCase())));
             }
         } else {
+            LocalDate timeAgo = LocalDate.now().minusMonths(numberOfMonths).minusDays(numberOfDays);
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+
+            try {
+                timeAgo = formatter.parseLocalDate(date);
+            } catch (Exception e) {
+                if (date != null) {
+                    System.out.println("Invalid date.");
+                    System.exit(1);
+                }
+            }
             for (String currency : currencies) {
-                System.out.println(Printers.printEarnedMoney(money, (ExchangeRate) currencyInformationReceiver.getData(currency.toLowerCase()),
-                        (ExchangeRate) currencyInformationReceiver.getData(currency.toLowerCase(), LocalDate.now().minusMonths(numberOfMonths).minusDays(numberOfDays)),
+                System.out.println(Printers.printEarnedMoney(money, (ExchangeRate) currencyInformationReceiver.getData(currency.toUpperCase()),
+                        (ExchangeRate) currencyInformationReceiver.getData(currency.toUpperCase(), timeAgo),
                         currency, numberOfMonths, numberOfDays));
             }
         }
