@@ -11,7 +11,7 @@ Check currencies rates from NBP API.
 
 ### Examples
 - `-m 200` check today's rates of usd, eur, gbp, chf; and how many usd, eur, gbp, chf you could buy spending 200 zl
-- `-c "usd"` check today's rate of usd; and how many usd you could buy spending 100 zl
-- `-e -m 300 -c "eur"` how many you could earn buying 1 month ago usd, spending 300 zl
+- `-c usd` check today's rate of usd; and how many usd you could buy spending 100 zl
+- `-e -m 300 -c eur` how many you could earn buying 1 month ago usd, spending 300 zl
 - `-e -ma 2 -da 23` how many you could earn buying 2 months and 23 days ago usd, eur, gbp, chf, spending 100 zl
-- `-e -d "2012-02-02" -m 1000 -c "usd" -c "eur"` how many you could earn buying 2012-02-02 usd, eur spending 1000 zl
+- `-e -d "2012-02-02" -m 1000 -c usd -c eur` how many you could earn buying 2012-02-02 usd, eur spending 1000 zl

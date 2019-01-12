@@ -26,7 +26,7 @@ public class CommandLineApp {
     int numberOfDays = 0;
 
     @Option(names = {"-ma", "--MonthsAgo"})
-    int numberOfMonths = 1;
+    int numberOfMonths = 0;
 
     @Option(names = {"-d", "--Date"})
     String date;
@@ -37,25 +37,26 @@ public class CommandLineApp {
 
         if (!earnOption) {
             for (String currency : currencies) {
-                System.out.println(Printers.printHowManyOtherCurrency(money, (ExchangeRate) currencyInformationReceiver.getData(currency.toUpperCase())));
+                System.out.println(Printers.printHowManyOtherCurrency(money, (ExchangeRate) currencyInformationReceiver.getData(currency.toUpperCase(),getLocalDate())));
             }
         } else {
-            LocalDate timeAgo = LocalDate.now().minusMonths(numberOfMonths).minusDays(numberOfDays);
-            DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-
-            try {
-                timeAgo = formatter.parseLocalDate(date);
-            } catch (Exception e) {
-                if (date != null) {
-                    System.out.println("Invalid date.");
-                    System.exit(1);
-                }
-            }
             for (String currency : currencies) {
                 System.out.println(Printers.printEarnedMoney(money, (ExchangeRate) currencyInformationReceiver.getData(currency.toUpperCase()),
-                        (ExchangeRate) currencyInformationReceiver.getData(currency.toUpperCase(), timeAgo),
-                        currency, numberOfMonths, numberOfDays));
+                        (ExchangeRate) currencyInformationReceiver.getData(currency.toUpperCase(), getLocalDate()), currency));
             }
+        }
+    }
+
+    private LocalDate getLocalDate() {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+        try {
+            return formatter.parseLocalDate(date);
+        } catch (Exception e) {
+            if (date != null) {
+                System.out.println("Invalid date.");
+                System.exit(1);
+            }
+            return LocalDate.now().minusMonths(numberOfMonths).minusDays(numberOfDays);
         }
     }
 }
