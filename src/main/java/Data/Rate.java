@@ -23,6 +23,14 @@ public class Rate {
     @JsonProperty("ask")
     private String ask;
 
+    public void setBid(String bid) {
+        this.bid = bid;
+    }
+
+    public void setAsk(String ask) {
+        this.ask = ask;
+    }
+
     public String getBid() {
         return bid;
     }

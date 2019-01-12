@@ -33,6 +33,10 @@ public class ExchangeRate {
         return code;
     }
 
+    public void setRates(Rate[] rates) {
+        this.rates = rates;
+    }
+
     @Override
     public String toString() {
         return "Data.ExchangeRate{" +
